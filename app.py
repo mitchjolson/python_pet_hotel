@@ -43,7 +43,10 @@ def add_pet():
 def get_allPets():
     try:
         pets = Pet.query.all()
-        return jsonify([e.serialize() for e in pets])
+        # return jsonify([e.serialize() for e in pets])
+        resp = jsonify([e.serialize() for e in pets])
+        resp.status_code = 200
+        return resp
     except Exception as e:
 	    return(str(e))
 
