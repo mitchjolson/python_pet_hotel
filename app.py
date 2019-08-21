@@ -9,7 +9,7 @@ app.config.from_object(Config)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-from models import Book
+from models import Pet
 
 @app.route("/")
 def hello():
@@ -37,8 +37,8 @@ def add_book():
 @app.route("/getall")
 def get_all():
     try:
-        books = Book.query.all()
-        return jsonify([e.serialize() for e in books])
+        pets = Pet.query.all()
+        return jsonify([e.serialize() for e in pets])
     except Exception as e:
 	    return(str(e))
 
