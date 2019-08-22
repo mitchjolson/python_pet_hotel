@@ -16,7 +16,7 @@ from models import Owner
 def hello():
     return "Hello World!"
 
-# add pet route will add pet to the database.
+# Post pet route will add pet to the database.
 @app.route("/addpets")
 def add_pet():
     name = request.args.get('name')
@@ -38,6 +38,20 @@ def add_pet():
     except Exception as e:
 	    return(str(e))
 
+# Post owners route will add owner to database
+@app.route("/addowner")
+def add_owner():
+    name = request.args.get('name')
+    try:
+        owner = Owner(
+            name=name,
+        )
+        db.session.add(owner)
+        db.session.commit()
+        return "owner added. owner id={}".format(owner.id)
+    except Exception as e:
+        return(str(e)) 
+
 # gets all the pets from the database
 @app.route("/getpets")
 def get_allPets():
@@ -51,7 +65,6 @@ def get_allPets():
 	    return(str(e))
 
 # get owners route from database
-
 @app.route("/getowners")
 def get_allOwners():
     try:
@@ -64,7 +77,8 @@ def get_allOwners():
 @app.route("/get/<id_>")
 def get_by_id(id_):
     try:
-        book = Book.query.filter_by(id=id_).first()
+        # .delete should allow us to delete the owner or pet by id.
+        book = Book.query.filter_by(id=id_).delete()
         return jsonify(book.serialize())
     except Exception as e:
 	    return(str(e))
