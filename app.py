@@ -42,18 +42,19 @@ def add_pet():
 	        return(str(e))
 
 # Post owners route will add owner to database
-@app.route("/addowner")
+@app.route("/addowner", methods=['GET', 'POST'])
 def add_owner():
-    name = request.args.get('name')
-    try:
-        owner = Owner(
-            name=name,
-        )
-        db.session.add(owner)
-        db.session.commit()
-        return "owner added. owner id={}".format(owner.id)
-    except Exception as e:
-        return(str(e)) 
+    if request.method == 'POST':
+        name = request.args.get('name')
+        try:
+            owner = Owner(
+                name=name,
+            )
+            db.session.add(owner)
+            db.session.commit()
+            return "owner added. owner id={}".format(owner.id)
+        except Exception as e:
+            return(str(e)) 
 
 # gets all the pets from the database
 @app.route("/getpets")
@@ -76,7 +77,7 @@ def get_allOwners():
     except Exception as e:
 	    return(str(e))
 
-
+#  Delete Owner Route
 @app.route("/deleteowner/<int:id>")
 def delete_owner_id(id):
     qry = db.session.query(Owner).filter(
@@ -94,6 +95,25 @@ def delete_owner_id(id):
         return resp
     except Exception as e:
         return(str(e))
+
+#  Delete Pet Route
+@app.route("/deletepet/<int:id>")
+def delete_pet_id(id):
+    qry = db.session.query(Pet).filter(
+            Pet.id==id)
+    name = qry.first()
+    try:
+        # owner = Owner(
+        #     id=id,
+        #     name=name,
+        # )
+        db.session.delete(name)
+        db.session.commit()
+        resp = jsonify([e.serialize() for e in pet])
+        resp.status_code = 200
+        return resp
+    except Exception as e:
+        return(str(e))        
     # try:
         # .delete should allow us to delete the owner or pet by id.
     #     pets = Pet.query.filter_by(id=id_).delete()
