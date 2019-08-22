@@ -76,33 +76,46 @@ def get_allOwners():
 	    return(str(e))
 
 
-@app.route("/get/<id_>")
-def get_by_id(id_):
+@app.route("/deleteowner/<int:id>")
+def delete_pet_id(id):
+    qry = db.session.query(Owner).filter(
+            Owner.id==id)
+    name = qry.first()
     try:
-        # .delete should allow us to delete the owner or pet by id.
-        book = Book.query.filter_by(id=id_).delete()
-        return jsonify(book.serialize())
+        # owner = Owner(
+        #     id=id,
+        #     name=name,
+        # )
+        db.session.delete(name)
+        db.session.commit()
+        return "owner deleted. owner id={}".format(owner.id)
     except Exception as e:
-	    return(str(e))
+        return(str(e))
+    # try:
+        # .delete should allow us to delete the owner or pet by id.
+    #     pets = Pet.query.filter_by(id=id_).delete()
+    #     return jsonify(book.serialize())
+    # except Exception as e:
+	    # return(str(e))
 
-@app.route("/add/form", methods=['GET', 'POST'])
-def add_book_form():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        author = request.form.get('author')
-        published = request.form.get('published')
-        try:
-            book = Book(
-                name=name,
-                author=author,
-                published=published
-            )
-            db.session.add(book)
-            db.session.commit()
-            return "Book added. book id={}".format(book.id)
-        except Exception as e:
-            return(str(e))
-    return render_template("getdata.html")
+# @app.route("/add/form", methods=['GET', 'POST'])
+# def add_book_form():
+#     if request.method == 'POST':
+#         name = request.form.get('name')
+#         author = request.form.get('author')
+#         published = request.form.get('published')
+#         try:
+#             book = Book(
+#                 name=name,
+#                 author=author,
+#                 published=published
+#             )
+#             db.session.add(book)
+#             db.session.commit()
+#             return "Book added. book id={}".format(book.id)
+#         except Exception as e:
+#             return(str(e))
+#     return render_template("getdata.html")
 
 
 if __name__ == '__main__':
