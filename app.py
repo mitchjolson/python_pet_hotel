@@ -24,6 +24,7 @@ def add_pet():
     breed = request.args.get('breed')
     color = request.args.get('color')
     checked_in = request.args.get('checked_in')
+    owner_name = requests.args.get('owner_name')
     try:
         pet = Pet(
             name=name,
@@ -31,6 +32,7 @@ def add_pet():
             breed=breed,
             color=color,
             checked_in=checked_in,
+            owner_name=owner_name,
         )
         db.session.add(pet)
         db.session.commit()
