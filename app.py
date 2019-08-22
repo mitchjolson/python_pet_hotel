@@ -78,42 +78,44 @@ def get_allOwners():
 	    return(str(e))
 
 #  Delete Owner Route
-@app.route("/deleteowner/<int:id>")
+@app.route("/deleteowner/<int:id>", methods=['DELETE'])
 def delete_owner_id(id):
-    qry = db.session.query(Owner).filter(
-            Owner.id==id)
-    name = qry.first()
-    try:
-        # owner = Owner(
-        #     id=id,
-        #     name=name,
-        # )
-        db.session.delete(name)
-        db.session.commit()
-        resp = jsonify([e.serialize() for e in owner])
-        resp.status_code = 200
-        return resp
-    except Exception as e:
-        return(str(e))
+    if request.method == 'DELETE':
+        qry = db.session.query(Owner).filter(
+                Owner.id==id)
+        name = qry.first()
+        try:
+            # owner = Owner(
+            #     id=id,
+            #     name=name,
+            # )
+            db.session.delete(name)
+            db.session.commit()
+            resp = jsonify([e.serialize() for e in owner])
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return(str(e))
 
 #  Delete Pet Route
-@app.route("/deletepet/<int:id>")
+@app.route("/deletepet/<int:id>", methods=['DELETE'])
 def delete_pet_id(id):
-    qry = db.session.query(Pet).filter(
-            Pet.id==id)
-    name = qry.first()
-    try:
-        # owner = Owner(
-        #     id=id,
-        #     name=name,
-        # )
-        db.session.delete(name)
-        db.session.commit()
-        resp = jsonify([e.serialize() for e in pet])
-        resp.status_code = 200
-        return resp
-    except Exception as e:
-        return(str(e))        
+    if request.method == 'DELETE':
+        qry = db.session.query(Pet).filter(
+                Pet.id==id)
+        name = qry.first()
+        try:
+            # owner = Owner(
+            #     id=id,
+            #     name=name,
+            # )
+            db.session.delete(name)
+            db.session.commit()
+            resp = jsonify([e.serialize() for e in pet])
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            return(str(e))        
     # try:
         # .delete should allow us to delete the owner or pet by id.
     #     pets = Pet.query.filter_by(id=id_).delete()
