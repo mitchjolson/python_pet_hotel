@@ -90,8 +90,7 @@ def delete_owner_id(id):
         # )
         db.session.delete(name)
         db.session.commit()
-        resp = jsonify([e.serialize() for e in owner])
-        resp.status_code = 200
+        resp = jsonify(Success=True)
         return resp
     except Exception as e:
         return(str(e))
@@ -109,8 +108,7 @@ def delete_pet_id(id):
         # )
         db.session.delete(name)
         db.session.commit()
-        resp = jsonify([e.serialize() for e in pet])
-        resp.status_code = 200
+        resp = jsonify(Success=True)
         return resp
     except Exception as e:
         return(str(e))        
@@ -120,6 +118,10 @@ def delete_pet_id(id):
     #     return jsonify(book.serialize())
     # except Exception as e:
 	    # return(str(e))
+
+# @app.route("/putcheck/", methods=['PUT'])
+# def putCheck():
+
 
 # @app.route("/add/form", methods=['GET', 'POST'])
 # def add_book_form():
