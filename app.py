@@ -17,28 +17,29 @@ def hello():
     return "Hello World!"
 
 # Post pet route will add pet to the database.
-@app.route("/addpets")
+@app.route("/addpets", methods=['GET', 'POST'])
 def add_pet():
-    name = request.args.get('name')
-    owner_id = request.args.get('owner_id')
-    breed = request.args.get('breed')
-    color = request.args.get('color')
-    checked_in = request.args.get('checked_in')
-    owner_name = requests.args.get('owner_name')
-    try:
-        pet = Pet(
-            name=name,
-            owner_id=owner_id,
-            breed=breed,
-            color=color,
-            checked_in=checked_in,
-            owner_name=owner_name,
-        )
-        db.session.add(pet)
-        db.session.commit()
-        return "pet added. pet id={}".format(pet.id)
-    except Exception as e:
-	    return(str(e))
+    if request.method == 'POST':
+        name = request.args.get('name')
+        owner_id = request.args.get('owner_id')
+        breed = request.args.get('breed')
+        color = request.args.get('color')
+        checked_in = request.args.get('checked_in')
+        owner_name = request.args.get('owner_name')
+        try:
+            pet = Pet(
+                name=name,
+                owner_id=owner_id,
+                breed=breed,
+                color=color,
+                checked_in=checked_in,
+                owner_name=owner_name,
+            )
+            db.session.add(pet)
+            db.session.commit()
+            return "pet added. pet id={}".format(pet.id)
+        except Exception as e:
+	        return(str(e))
 
 # Post owners route will add owner to database
 @app.route("/addowner")
@@ -77,7 +78,7 @@ def get_allOwners():
 
 
 @app.route("/deleteowner/<int:id>")
-def delete_pet_id(id):
+def delete_owner_id(id):
     qry = db.session.query(Owner).filter(
             Owner.id==id)
     name = qry.first()
@@ -88,7 +89,9 @@ def delete_pet_id(id):
         # )
         db.session.delete(name)
         db.session.commit()
-        return "owner deleted. owner id={}".format(owner.id)
+        resp = jsonify([e.serialize() for e in owner])
+        resp.status_code = 200
+        return resp
     except Exception as e:
         return(str(e))
     # try:
